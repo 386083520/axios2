@@ -1,0 +1,27 @@
+{
+  "name": "axios2",
+  "version": "1.0.0",
+  "description": "axios源码实现",
+  "main": "lib/axios.js",
+  "directories": {
+    "example": "examples",
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/386083520/axios2.git"
+  },
+  "author": "gsd",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/386083520/axios2/issues"
+  },
+  "homepage": "https://github.com/386083520/axios2#readme",
+  "devDependencies": {
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
+  }
+}
