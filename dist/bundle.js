@@ -1,10 +1,34 @@
 var axios = (function () {
     'use strict';
 
+    var xhr = function xhrAdapter(config) {
+        return new Promise(function dispatchXhrRequest(resolve, reject) {
+            resolve('gsd xhrAdapter');
+        })
+    };
+
+    function getDefaultAdapter() {
+        var adapter;
+        if (typeof XMLHttpRequest !== 'undefined') {
+            adapter = xhr;
+        }
+        return adapter;
+    }
     var defaults = {
-        gsd2: 'gsd2'
+        gsd2: 'gsd2',
+        adapter: getDefaultAdapter(),
     };
     var defaults_1 = defaults;
+
+    var dispatchRequest = function dispatchRequest(config) {
+        console.log('dispatchRequest', config);
+        var adapter = defaults_1.adapter;
+        return adapter(config).then(function onAdapterResolution(response) {
+            return response + ' gsdadapter'
+        }, function onAdapterRejection(reason) {
+
+        })
+    };
 
     function Axios(instanceConfig) {
         this.defaults = instanceConfig;
@@ -12,6 +36,13 @@ var axios = (function () {
     }
     Axios.prototype.request = function request(config) {
         console.log('gsd1', config);
+        var promise;
+        promise = Promise.resolve(config);
+        var chain = [dispatchRequest, undefined];
+        while (chain.length) {
+            promise = promise.then(chain.shift(), chain.shift());
+        }
+        return promise
     };
 
     Axios.prototype.get = function request(config) {

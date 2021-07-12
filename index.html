@@ -9,6 +9,10 @@
     <script>
         axios({
             gsd: 'gsd'
+        }).then(result => {
+            console.log(result)
+        }, error => {
+            console.log(error)
         })
     </script>
 </body>
