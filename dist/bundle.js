@@ -1,9 +1,66 @@
 var axios = (function () {
     'use strict';
 
+    var enhanceError = function enhanceError(error, config, code, request, response) {
+        error.config = config;
+        if (code) {
+            error.code = code;
+        }
+
+        error.request = request;
+        error.response = response;
+        error.isAxiosError = true;
+        error.toJSON = {};
+        return error;
+    };
+
+    var createError = function createError(message, config, code, request, response) {
+        var error = new Error(message);
+        return enhanceError(error, config, code, request, response);
+    };
+
+    var settle = function settle(resolve, reject, response) {
+        if(response.status === 200) {
+            resolve(response);
+        }else {
+            reject(createError(
+                'Request failed with status code ' + response.status,
+                response.config,
+                null,
+                response.request,
+                response
+            ));
+        }
+    };
+
     var xhr = function xhrAdapter(config) {
         return new Promise(function dispatchXhrRequest(resolve, reject) {
-            resolve('gsd xhrAdapter');
+            // resolve('gsd xhrAdapter')
+            var requestData = config.data;
+            var request = new XMLHttpRequest();
+            function onloadend() {
+                if (!request) {
+                    return;
+                }
+                var response = {
+                    data: request.response,
+                    status: request.status,
+                    statusText: request.statusText,
+                    headers: null,
+                    config: config,
+                    request: request
+                };
+                settle(resolve, reject, response);
+                request = null;
+            }
+            request.open(config.method.toUpperCase(), config.url, true);
+            request.onreadystatechange = function handleLoad() {
+                if (!request || request.readyState !== XMLHttpRequest.DONE) {
+                    return;
+                }
+                setTimeout(onloadend);
+            };
+            request.send(requestData);
         })
     };
 

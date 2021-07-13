@@ -8,6 +8,8 @@
 <body>
     <script>
         axios({
+            url: 'http://localhost:3000/posts/1',
+            method: 'get',
             gsd: 'gsd'
         }).then(result => {
             console.log(result)
