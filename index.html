@@ -8,36 +8,36 @@
 <body>
     <script>
         // Add a request interceptor
-        axios.interceptors.request.use(function (config) {
+        axios.interceptors.request.use(function request1(config) {
             console.log('requestgsd1')
             return config;
-        }, function (error) {
+        }, function requesterror1(error) {
             // Do something with request error
             return Promise.reject(error);
         });
 
         // Add a response interceptor
-        axios.interceptors.response.use(function (response) {
+        axios.interceptors.response.use(function response1(response) {
             console.log('responsegsd1')
             return response;
-        }, function (error) {
+        }, function responseerror1(error) {
             // Do something with response error
             return Promise.reject(error);
         });
 
-        axios.interceptors.request.use(function (config) {
+        axios.interceptors.request.use(function request2(config) {
             console.log('requestgsd2')
             return config;
-        }, function (error) {
+        }, function requesterror2(error) {
             // Do something with request error
             return Promise.reject(error);
         });
 
         // Add a response interceptor
-        axios.interceptors.response.use(function (response) {
+        axios.interceptors.response.use(function response2(response) {
             console.log('responsegsd2')
             return response;
-        }, function (error) {
+        }, function responseerror1(error) {
             // Do something with response error
             return Promise.reject(error);
         });
