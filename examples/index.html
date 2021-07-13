@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>axios快速使用</title>
-    <script src="./dist/bundle.js"></script>
+    <title>axios使用</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
     <script>
@@ -41,11 +41,9 @@
             // Do something with response error
             return Promise.reject(error);
         });
-        axios({
-            url: 'http://localhost:3000/posts/1',
-            method: 'get',
-            gsd: 'gsd'
-        }).then(result => {
+
+        axios.get('http://localhost:3000/posts/1')
+            .then(result => {
             console.log(result)
         }, error => {
             console.log(error)

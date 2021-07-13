@@ -87,9 +87,25 @@ var axios = (function () {
         })
     };
 
+    function InterceptorManager() {
+        this.handlers = [];
+    }
+
+    InterceptorManager.prototype.use = function use(fulfilled, rejected) {
+        this.handlers.push({
+            fulfilled: fulfilled,
+            rejected: rejected
+        });
+    };
+
+    var InterceptorManager_1 = InterceptorManager;
+
     function Axios(instanceConfig) {
         this.defaults = instanceConfig;
-        this.interceptors = {};
+        this.interceptors = {
+            request: new InterceptorManager_1(),
+            response: new InterceptorManager_1()
+        };
     }
     Axios.prototype.request = function request(config) {
         console.log('gsd1', config);
@@ -128,6 +144,7 @@ var axios = (function () {
         // TODO
         var instance = Axios_1.prototype.request.bind(context);
         utils.extend(instance, Axios_1.prototype);
+        utils.extend(instance, context);
         console.dir(instance);
         return instance
     }
