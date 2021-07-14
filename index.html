@@ -6,23 +6,11 @@
     <script src="./dist/bundle.js"></script>
 </head>
 <body>
-    <button onclick="cancelRequest()">取消</button>
     <script>
-        var CancelToken = axios.CancelToken
-        function cancelRequest() {
-            cancel()
-        }
-        var cancel;
-        axios({
-            url: 'http://localhost:3000/posts/1',
-            method: 'get',
-            cancelToken: new CancelToken(function executor(c) {
-                cancel = c
-            })
+        axios.get('http://localhost:3000/posts/1', {
+            gsd: 'gsd'
         }).then(result => {
             console.log(result)
-        }, error => {
-            console.log(error)
         })
     </script>
 </body>
