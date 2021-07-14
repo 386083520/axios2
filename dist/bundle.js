@@ -60,6 +60,17 @@ var axios = (function () {
                 }
                 setTimeout(onloadend);
             };
+            if(config.cancelToken) {
+                config.cancelToken.promise.then(function onCanceled(cancel) {
+                    if (!request) {
+                        return;
+                    }
+
+                    request.abort();
+                    reject(cancel);
+                    request = null;
+                });
+            }
             request.send(requestData);
         })
     };
@@ -83,7 +94,7 @@ var axios = (function () {
         return adapter(config).then(function onAdapterResolution(response) {
             return response + ' gsdadapter'
         }, function onAdapterRejection(reason) {
-
+            throw reason
         })
     };
 
@@ -124,7 +135,6 @@ var axios = (function () {
         var chain = [dispatchRequest, undefined];
         Array.prototype.unshift.apply(chain, requestInterceptorChain);
         Array.prototype.push.apply(chain, responseInterceptorChain);
-        debugger
         while (chain.length) {
             promise = promise.then(chain.shift(), chain.shift());
         }
@@ -151,6 +161,18 @@ var axios = (function () {
         extend: extend
     };
 
+    function CancelToken(executor) {
+        var resolvePromise;
+        this.promise = new Promise(function promiseExecutor(resolve) {
+            resolvePromise = resolve;
+        });
+        executor(function cancel(message) {
+            resolvePromise('gsd 测试失败');
+        });
+    }
+
+    var CancelToken_1 = CancelToken;
+
     function createInstance(defaultConfig) {
         console.log('gsd2', defaultConfig);
         var context = new Axios_1(defaultConfig);
@@ -162,6 +184,7 @@ var axios = (function () {
         return instance
     }
     var axios = createInstance(defaults_1);
+    axios.CancelToken = CancelToken_1;
     var axios_1 = axios;
 
     return axios_1;
