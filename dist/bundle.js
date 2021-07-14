@@ -111,6 +111,39 @@ var axios = (function () {
 
     var InterceptorManager_1 = InterceptorManager;
 
+    var mergeConfig = function mergeConfig(config1, config2) {
+        var config = {};
+        return config;
+    };
+
+    var toString = Object.prototype.toString;
+
+    function extend(a, b, thisArg) {
+        Object.keys(b).forEach(item => {
+            a[item] = b[item];
+        });
+    }
+
+    function isArray(val) {
+        return toString.call(val) === '[object Array]';
+    }
+
+    function forEach(obj, fn) {
+        if (obj === null || typeof obj === 'undefined') {
+            return;
+        }
+        if (isArray(obj)) {
+            for (var i = 0, l = obj.length; i < l; i++) {
+                fn.call(null, obj[i]);
+            }
+        }
+    }
+
+    var utils = {
+        extend: extend,
+        forEach: forEach
+    };
+
     function Axios(instanceConfig) {
         this.defaults = instanceConfig;
         this.interceptors = {
@@ -141,25 +174,28 @@ var axios = (function () {
         return promise
     };
 
-    Axios.prototype.get = function request(config) {
-        console.log('gsd1get', config);
-    };
+    /*Axios.prototype.get = function request(config) {
+        console.log('gsd1get', config)
+    }*/
+    utils.forEach(['delete', 'get', 'head', 'options'], function forEachMethodNoData(method) {
+        Axios.prototype[method] = function(url, config) {
+            return this.request(mergeConfig(config || {}, {
+                method: method,
+                url: url,
+                data: (config || {}).data
+            }));
+        };
+    });
+
+    utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+
+    });
 
     Axios.prototype.getUri = function getUri(config) {
         console.log('gsd1getUri', config);
     };
 
     var Axios_1 = Axios;
-
-    function extend(a, b, thisArg) {
-        Object.keys(b).forEach(item => {
-            a[item] = b[item];
-        });
-    }
-
-    var utils = {
-        extend: extend
-    };
 
     function CancelToken(executor) {
         var resolvePromise;
